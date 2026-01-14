@@ -11,7 +11,6 @@ public class HelloController {
         return "Hello World" + request.getSession().getId();
     }
 
-    //Session to keep login information (credential) for any time, any resources later
     @GetMapping("greet")
     public String greet(HttpServletRequest request) {
         return "How are you?" + request.getSession().getId();
