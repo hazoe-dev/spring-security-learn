@@ -1,18 +1,27 @@
 package dev.hazoe.springsecuritydemo;
 
 import dev.hazoe.springsecuritydemo.model.Student;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 public class StudentController {
 
-    List<Student> students = List.of(
-            new Student(1, "Ha", "Java"),
-            new Student(2, "Zoe", "Js"),
-            new Student(3, "H", "C")
-    );
+    List<Student> students = new ArrayList<>();
+
+    public StudentController() {
+        this.students.add(new Student(1, "Ha", "Java"));
+        this.students.add(new Student(2, "Zoe", "Js"));
+    }
+
+    @GetMapping( "scrf-token")
+    public CsrfToken getCsrfToken(HttpServletRequest request) {
+        return (CsrfToken) request.getAttribute("_csrf");
+    }
 
     @GetMapping(path = "students", produces = "application/JSON")
     public List<Student> getAllStudents(){
