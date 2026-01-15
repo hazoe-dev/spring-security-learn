@@ -1,4 +1,4 @@
-package dev.hazoe.springsecuritydemo;
+package dev.hazoe.springsecuritydemo.controller;
 
 import dev.hazoe.springsecuritydemo.model.Student;
 import jakarta.servlet.http.HttpServletRequest;
