@@ -3,6 +3,7 @@ package dev.hazoe.springsecuritydemo.service;
 import dev.hazoe.springsecuritydemo.dao.UserRepo;
 import dev.hazoe.springsecuritydemo.model.Role;
 import dev.hazoe.springsecuritydemo.model.User;
+import dev.hazoe.springsecuritydemo.model.UserPrincipal;
 import dev.hazoe.springsecuritydemo.model.dto.LoginResponse;
 import dev.hazoe.springsecuritydemo.model.dto.UserRequest;
 import dev.hazoe.springsecuritydemo.model.dto.UserResponse;
@@ -52,9 +53,11 @@ public class UserService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        String role = userPrincipal.getUser().getRole().asRole();
         return new LoginResponse(
                 user.username(),
-                jwtService.getAccessToken(user.username())
+                jwtService.getAccessToken(user.username(), role)
         );
     }
 }

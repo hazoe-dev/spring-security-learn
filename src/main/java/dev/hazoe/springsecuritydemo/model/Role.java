@@ -1,6 +1,9 @@
 package dev.hazoe.springsecuritydemo.model;
 
 public enum Role {
-    USER, ADMIN
+    USER, ADMIN;
+    public String asRole() {
+        return name();
+    }
 }
 
