@@ -3,6 +3,7 @@ package dev.hazoe.springsecuritydemo.service;
 import dev.hazoe.springsecuritydemo.dao.UserRepo;
 import dev.hazoe.springsecuritydemo.model.Role;
 import dev.hazoe.springsecuritydemo.model.User;
+import dev.hazoe.springsecuritydemo.model.dto.LoginResponse;
 import dev.hazoe.springsecuritydemo.model.dto.UserRequest;
 import dev.hazoe.springsecuritydemo.model.dto.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,14 +19,17 @@ public class UserService {
     private UserRepo userRepo;
     private PasswordEncoder passwordEncoder;
     private AuthenticationManager authenticationManager;
+    private JwtService jwtService;
 
     @Autowired
     public UserService(UserRepo userRepo,
                        PasswordEncoder passwordEncoder,
-                       AuthenticationManager authenticationManager) {
+                       AuthenticationManager authenticationManager,
+                       JwtService jwtService) {
         this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
     }
 
     public UserResponse save(UserRequest user) {
@@ -38,7 +41,7 @@ public class UserService {
         return new UserResponse(savedUser.getUsername());
     }
 
-    public UserResponse login(UserRequest user) {
+    public LoginResponse login(UserRequest user) {
         //Spring auto handles login fail
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -49,7 +52,9 @@ public class UserService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        UserDetails principal = (UserDetails) authentication.getPrincipal();
-        return new UserResponse(principal.getUsername());
+        return new LoginResponse(
+                user.username(),
+                jwtService.getAccessToken(user.username())
+        );
     }
 }

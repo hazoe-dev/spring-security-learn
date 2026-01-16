@@ -1,5 +1,6 @@
 package dev.hazoe.springsecuritydemo.controller;
 
+import dev.hazoe.springsecuritydemo.model.dto.LoginResponse;
 import dev.hazoe.springsecuritydemo.model.dto.UserRequest;
 import dev.hazoe.springsecuritydemo.model.dto.UserResponse;
 import dev.hazoe.springsecuritydemo.service.UserService;
@@ -26,7 +27,7 @@ public class UserController {
     }
 
     @PostMapping("login")
-    public ResponseEntity<UserResponse> login(@RequestBody UserRequest user) {
+    public ResponseEntity<LoginResponse> login(@RequestBody UserRequest user) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.login(user));
     }
 }
