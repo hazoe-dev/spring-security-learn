@@ -1,4 +1,4 @@
-package dev.hazoe.springsecuritydemo.config;
+package dev.hazoe.springsecuritydemo.config.init;
 
 import dev.hazoe.springsecuritydemo.model.Role;
 import dev.hazoe.springsecuritydemo.model.User;
